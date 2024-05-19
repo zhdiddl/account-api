@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JPA(Java Persistence API)를 지원
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // Bean validation (객체에서 직접 validation 처리) 지원
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Spring을 활용한 Web(API) 개발 지원
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // redis client: redisson을 이용해 분산락 지원
+    implementation 'org.redisson:redisson:3.17.1'
+    // embedded redis: 어플리케이션에서 간단히 테스트할 수 있는 임베디드 형식 레디스 (현업에선 사용X)
+    implementation('it.ozimov:embedded-redis:0.7.3') {
+        exclude group: "org.slf4j", module: "slf4j-simple" // 의존성을 빼 줄 내용
+    }
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
